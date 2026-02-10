@@ -12,7 +12,7 @@ See `docs/mobile-codex-blueprint.md` for the complete architecture and setup che
 
 ## Included workflow templates
 
-- `.github/workflows/ci.yml` — PR checks and lint/test placeholders.
+- `.github/workflows/ci.yml` — PR checks with auto-detected dependency install (works with npm/yarn/pnpm and repos without `package.json`).
 - `.github/workflows/deploy-staging.yml` — auto-deploy staging from `main`.
 - `.github/workflows/deploy-prod.yml` — manually approved production deployment.
 - `.github/workflows/codex-command-router.yml` — issue-comment command router for `/change` and `/deploy prod` style commands.

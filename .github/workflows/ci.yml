@@ -21,22 +21,46 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install dependencies (auto-detect)
         run: |
-          # Replace with your package manager command.
-          npm ci
+          if [ ! -f package.json ]; then
+            echo "No package.json found; skipping Node dependency install."
+            exit 0
+          fi
+
+          if [ -f pnpm-lock.yaml ]; then
+            corepack enable
+            pnpm install --frozen-lockfile
+          elif [ -f yarn.lock ]; then
+            corepack enable
+            yarn install --frozen-lockfile
+          elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci
+          else
+            echo "No npm lockfile found; running npm install instead of npm ci."
+            npm install
+          fi
 
       - name: Lint
         run: |
-          # Replace/extend with your lint checks.
+          if [ ! -f package.json ]; then
+            echo "No package.json found; skipping lint."
+            exit 0
+          fi
           npm run lint --if-present
 
       - name: Test
         run: |
-          # Replace/extend with your test command.
+          if [ ! -f package.json ]; then
+            echo "No package.json found; skipping tests."
+            exit 0
+          fi
           npm test --if-present
 
       - name: Build
         run: |
-          # Replace with your build command.
+          if [ ! -f package.json ]; then
+            echo "No package.json found; skipping build."
+            exit 0
+          fi
           npm run build --if-present
